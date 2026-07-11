@@ -1,0 +1,39 @@
+1. Hardware Load Balancer
+
+Physical device used in data centers.
+
+Features
+High performance
+Expensive
+Used by large companies
+Example
+F5 Networks
+
+Users → Hardware Load Balancer → Servers
+
+2. Software Load Balancer
+
+Software application installed on a server or cloud.
+
+Features
+Low cost
+Flexible
+Easy to configure
+Examples
+NGINX
+HAProxy
+Users → NGINX/HAProxy → Multiple Servers
+
+Types Based on OSI Layer
+3. Layer 4 Load Balancer
+
+Works at Transport Layer.
+
+Uses
+IP Address
+TCP/UDP Port
+Features
+Faster
+Less intelligent routing
+Example
+Request → Based on IP + Port
