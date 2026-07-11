@@ -1,0 +1,335 @@
+# Rate Limiting in System Design
+
+## What is Rate Limiting?
+
+**Rate Limiting** is a technique used to control the number of requests a client or user can send to a server within a specified time period.
+
+### Why is Rate Limiting Important?
+
+* Prevents server overload
+* Protects against brute-force attacks
+* Prevents API abuse and spam
+* Ensures fair usage among users
+* Improves application availability and performance
+
+---
+
+# How Rate Limiting Works
+
+```text
+        Client
+           │
+           ▼
+    Rate Limiter
+           │
+   ┌───────┴────────┐
+   │                │
+Allowed         Limit Exceeded
+   │                │
+   ▼                ▼
+ Server      HTTP 429 Too Many Requests
+```
+
+### Workflow
+
+1. Client sends a request.
+2. The Rate Limiter identifies the client (User ID, IP Address, API Key, etc.).
+3. It checks whether the client has exceeded the configured request limit.
+4. If the request is within the limit, it is forwarded to the server.
+5. Otherwise, the request is rejected with **HTTP 429 (Too Many Requests)**.
+
+---
+
+# Real-World Examples
+
+## Login System
+
+* Maximum **5 failed login attempts**.
+* Additional attempts are temporarily blocked.
+
+## OTP Service
+
+* Only **3 OTP requests every 5 minutes**.
+
+## Payment APIs
+
+* Limit requests to prevent fraud and duplicate transactions.
+
+## Ticket Booking Systems
+
+* Prevent bots from purchasing all available tickets.
+
+## Public APIs
+
+Example:
+
+* 100 requests per minute
+* 1,000 requests per hour
+
+---
+
+# Rate Limiting Algorithms
+
+## 1. Token Bucket Algorithm
+
+### Concept
+
+A bucket stores tokens.
+
+* Tokens are added continuously at a fixed rate.
+* Every incoming request consumes one token.
+* If tokens are available, the request is allowed.
+* Otherwise, the request is rejected.
+
+### Example
+
+Bucket Capacity = 10 Tokens
+
+Refill Rate = 1 Token/Second
+
+```
+Bucket = 10 Tokens
+
+Request 1 → Allowed
+Request 2 → Allowed
+...
+Request 10 → Allowed
+Request 11 → Rejected
+```
+
+### Advantages
+
+* Supports burst traffic
+* Flexible
+* Memory efficient
+
+### Disadvantages
+
+* More complex implementation
+* Requires synchronization in distributed systems
+
+### Best Use Cases
+
+* API Gateways
+* Cloud Platforms
+* Authentication Services
+
+---
+
+## 2. Leaky Bucket Algorithm
+
+### Concept
+
+Incoming requests are stored in a queue (bucket).
+
+Requests leave the bucket at a constant processing rate.
+
+If the bucket becomes full, additional requests are dropped.
+
+```
+Incoming Requests
+        │
+        ▼
+    Queue (Bucket)
+        │
+        ▼
+ Constant Output Rate
+```
+
+### Example
+
+Bucket Size = 5
+
+Leak Rate = 1 Request/Second
+
+If 10 requests arrive simultaneously:
+
+* First 5 requests are queued.
+* Remaining 5 requests are rejected.
+* Queued requests are processed one per second.
+
+### Advantages
+
+* Smooth traffic flow
+* Prevents sudden traffic spikes
+
+### Disadvantages
+
+* Burst traffic is not supported
+* Requests may experience delays
+
+### Best Use Cases
+
+* Network Traffic Shaping
+* Routers
+* Messaging Systems
+
+---
+
+## 3. Fixed Window Algorithm
+
+### Concept
+
+Time is divided into fixed intervals.
+
+Each interval has a request limit.
+
+The counter resets when a new window begins.
+
+### Example
+
+Limit = 5 Requests/Minute
+
+```
+Window 10:00–10:01
+
+1 ✓
+2 ✓
+3 ✓
+4 ✓
+5 ✓
+6 ✗ Rejected
+
+Counter resets at 10:01
+```
+
+### Advantages
+
+* Easy to implement
+* Very low memory usage
+* Fast execution
+
+### Disadvantages
+
+* Boundary burst problem
+
+Example:
+
+```
+10:00:59 → 5 Requests
+10:01:01 → 5 Requests
+
+Total = 10 Requests in 2 Seconds
+```
+
+---
+
+## 4. Sliding Window Log
+
+### Concept
+
+Stores the timestamp of every request.
+
+For each new request:
+
+* Remove expired timestamps.
+* Count requests within the current window.
+* Allow or reject accordingly.
+
+### Example
+
+```
+Window = Last 60 Seconds
+
+10:00:10 ✓
+10:00:20 ✓
+10:00:30 ✓
+10:00:40 ✓
+10:00:50 ✓
+
+10:01:00 ✗ Rejected
+```
+
+### Advantages
+
+* Highly accurate
+* Eliminates boundary burst problem
+
+### Disadvantages
+
+* High memory usage
+* Stores every request timestamp
+
+---
+
+## 5. Sliding Window Counter
+
+### Concept
+
+An optimized version of Sliding Window Log.
+
+Instead of storing every timestamp:
+
+* Store counters for the previous and current windows.
+* Estimate the total request count using weighted calculation.
+
+### Example
+
+```
+Previous Window Count = 40
+
+Current Window Count = 20
+
+Estimated Count =
+Current Window +
+(Previous Window × Overlap Percentage)
+```
+
+### Advantages
+
+* Lower memory usage
+* Better scalability
+* More efficient than Sliding Window Log
+
+### Disadvantages
+
+* Slight approximation error
+* Less accurate than storing every timestamp
+
+---
+
+# Comparison of Rate Limiting Algorithms
+
+| Algorithm              | Burst Traffic | Accuracy  | Memory Usage | Complexity |
+| ---------------------- | ------------- | --------- | ------------ | ---------- |
+| Token Bucket           | ⭐⭐⭐⭐⭐         | High      | Medium       | Medium     |
+| Leaky Bucket           | ⭐⭐            | High      | Medium       | Medium     |
+| Fixed Window           | ⭐             | Medium    | Low          | Easy       |
+| Sliding Window Log     | ⭐⭐⭐⭐          | Very High | High         | High       |
+| Sliding Window Counter | ⭐⭐⭐⭐          | High      | Medium       | Medium     |
+
+---
+
+# Which Algorithm Should You Choose?
+
+| Use Case                        | Recommended Algorithm  |
+| ------------------------------- | ---------------------- |
+| API Gateways                    | Token Bucket           |
+| Login & OTP Systems             | Fixed Window           |
+| Network Traffic Shaping         | Leaky Bucket           |
+| High-Accuracy Rate Limiting     | Sliding Window Log     |
+| Large-Scale Distributed Systems | Sliding Window Counter |
+
+---
+
+# Interview Definitions
+
+### Token Bucket
+
+A rate limiting algorithm where tokens are generated at a fixed rate, and each request consumes one token. Requests are accepted only if tokens are available.
+
+### Leaky Bucket
+
+A queue-based algorithm where requests are processed at a constant rate. Excess requests are discarded when the queue becomes full.
+
+### Fixed Window
+
+Counts requests within fixed time intervals and resets the counter at the beginning of every new interval.
+
+### Sliding Window Log
+
+Stores timestamps for every request and checks the number of requests within a moving time window.
+
+### Sliding Window Counter
+
+Uses counters from the current and previous windows to estimate the number of requests, reducing memory usage while maintaining high accuracy.
