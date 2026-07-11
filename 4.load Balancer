@@ -1,0 +1,28 @@
+A Load Balancer is a system that distributes incoming user requests across multiple servers to avoid overloading a single server.
+
+Example Real-Time Scenario
+
+Imagine a website like Amazon receiving millions of users.
+
+Without load balancing:
+
+All users hit one server
+Server becomes slow or crashes
+
+With load balancing:
+
+Requests are shared among many servers
+Website remains fast and available
+
+Users
+   ↓
+Load Balancer
+ ↙   ↓   ↘
+Server1 Server2 Server3
+
+Main Functions
+Distributes traffic
+Prevents server overload
+Improves performance
+Provides high availability
+Helps fault tolerance

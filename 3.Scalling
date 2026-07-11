@@ -1,0 +1,81 @@
+Scaling
+
+Scaling means increasing the system capacity to handle:
+
+More users
+More traffic
+More data
+More requests
+
+
+
+Vertical Scaling
+
+Vertical scaling means increasing the power of a single server/system by adding more resources.
+
+Resources Added
+More RAM
+Faster CPU
+More Storage
+Better GPU
+Example
+
+A website server is slow.
+
+Instead of adding many servers, we:
+
+Upgrade from 8 GB RAM → 32 GB RAM
+Upgrade CPU from 2 Core → 8 Core
+
+Now the same server handles more users.
+
+Real-Time Example
+Small startup websites
+College management systems
+Small e-commerce websites
+
+Example:
+A MySQL database running on one machine becomes slow, so the company upgrades the machine configuration.
+
+Advantages
+Easy to implement
+No major code changes
+Simple maintenance
+Disadvantages
+Has hardware limit
+Expensive after some point
+If one server fails → whole system fails
+
+1. Vertical Scaling
+
+Increasing the power of the same server.
+
+Example:
+
+8 GB RAM → 32 GB RAM
+2 Core CPU → 8 Core CPU
+One Server → Bigger Server
+
+2. Horizontal Scaling
+
+Adding multiple servers instead of upgrading one server.
+
+Example:
+
+1 server → 5 servers
+Load is shared among all servers
+Server 1
+Server 2
+Server 3
+Real-Time Example
+Instagram / Netflix
+
+When millions of users access the app:
+
+One server is not enough
+Multiple servers are added
+Load balancer distributes traffic
+
+This is called horizontal scaling.
+
+

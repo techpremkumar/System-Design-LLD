@@ -1,0 +1,25 @@
+User
+
+↓
+
+Browser
+
+↓
+
+Load Balancer
+
+↓
+
+Application Server
+
+↓
+
+Redis Cache
+
+↓
+
+MySQL
+
+↓
+
+AWS S3

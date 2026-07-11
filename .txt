@@ -1,0 +1,21 @@
+Complete System Design (HLD) Roadmap
+1. Understanding System Design
+What is System Design?
+
+System Design is the process of planning how a software application will work before writing code.
+
+Instead of writing Java classes, you decide:
+
+How users connect
+Where data is stored
+How requests are processed
+How millions of users are handled
+
+Example
+
+Design YouTube
+
+
+Why Learn It?
+
+Large companies ask System Design because they want engineers who can build scalable software, not just write code.
