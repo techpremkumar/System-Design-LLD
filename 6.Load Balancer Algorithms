@@ -1,0 +1,107 @@
+1. Round Robin Algorithm
+
+Requests are distributed one by one in circular order.
+
+Example:
+
+Request 1 → Server A
+Request 2 → Server B
+Request 3 → Server C
+Request 4 → Server A
+
+Advantages
+Simple
+Easy to implement
+
+Disadvantages
+Does not check server load
+Real-Time Example
+
+Used in small websites where all servers have same capacity.
+
+2. Weighted Round Robin
+
+Servers with higher capacity get more requests.
+
+Example:
+
+Server A weight = 3
+Server B weight = 1
+
+Traffic:
+A → A → A → B
+
+Advantages
+
+Better than normal Round Robin
+Handles powerful servers efficiently
+Real-Time Example
+
+E-commerce websites with different server configurations.
+
+3. Least Connections Algorithm
+
+New request goes to the server with the fewest active connections.
+
+Advantages
+
+Good for long user sessions
+Better traffic management
+Disadvantages
+Slightly complex
+Real-Time Example
+
+Banking applications and chat applications.
+
+4. Weighted Least Connections
+
+Combines:
+
+Server weight
+Least active connections
+
+Powerful servers handle more traffic.
+
+Real-Time Example
+
+Cloud platforms and enterprise applications.
+
+5. IP Hash Algorithm
+
+Client IP address decides the server.
+
+Formula:
+Hash(IP Address) → Server
+
+Same user always connects to same server.
+
+Advantages
+
+Session persistence
+
+Disadvantages
+Uneven traffic possible
+Real-Time Example
+
+Login-based applications.
+
+6. Least Response Time
+
+Request goes to server with:
+
+Lowest response time
+Least active connections
+Advantages
+Faster performance
+Real-Time Example
+
+High-performance APIs and streaming platforms.
+
+7. Random Algorithm
+
+Randomly selects a server.
+
+Advantages
+Very simple
+Disadvantages
+Traffic imbalance possible
